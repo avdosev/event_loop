@@ -12,10 +12,14 @@ private:
     using key_t = std::random_device::result_type;
     std::map<key_t, invoker_t> invokers;
 public:
-     return_type invoke(argument_types ...args) {
+    return_type invoke(argument_types ...args) {
         for (auto key_invoker : invokers) {
             key_invoker.second(args...);
         }
+    }
+
+    return_type operator() (argument_types ...args) {
+        this->invoke(args...);
     }
 
     key_t add(invoker_t invoker) {
