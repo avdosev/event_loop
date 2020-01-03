@@ -24,6 +24,13 @@ public:
         return key;
     }
 
+    template <class class_t, typename method_return_t>
+    key_t add(class_t& obj, method_return_t (class_t::*method)(argument_types...)) {
+        return this->add([&obj, method](argument_types... args) {
+            (obj.*method)(args...);
+        });
+    }
+
     void remove(key_t invoker_key) {
         invokers.erase(invoker_key);
     }
