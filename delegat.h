@@ -4,17 +4,15 @@
 #include <map>
 #include <random>
 
-template <typename UnusedType>
-class delegate;
-
-template <typename return_type, typename ...argument_types>
-class delegate <return_type(argument_types...)> {
+template <typename ...argument_types>
+class delegate {
 private:
+    using return_type = void;
     using invoker_t = std::function<return_type(argument_types...)>;
     using key_t = std::random_device::result_type;
     std::map<key_t, invoker_t> invokers;
 public:
-    return_type invoke(argument_types ...args) {
+     return_type invoke(argument_types ...args) {
         for (auto key_invoker : invokers) {
             key_invoker.second(args...);
         }
@@ -30,13 +28,11 @@ public:
         invokers.erase(invoker_key);
     }
 
-    void operator += (invoker_t invoker) {
-        add(invoker);
-    }
-
-    void operator -= (invoker_t invoker) {
-        remove(invoker);
-    }
+    invoker_t function() {
+         return [this](argument_types ...args){
+             this->invoke();
+         };
+     }
 
 private:
     key_t find_unoccupied_key() {
