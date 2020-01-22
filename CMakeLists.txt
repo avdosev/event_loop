@@ -4,17 +4,6 @@ project(event_system)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(
-        event_loop
-        delegat.h
-        event.h
-        event_define.h
-        event_loop.h
-        interval.h
-        timer.h
-        main.cpp
-        event_loop.cpp)
-
 add_library(
         event_system
         delegat.h
